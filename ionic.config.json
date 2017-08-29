@@ -1,5 +1,8 @@
 {
   "name": "foodie_moodie_mobile",
   "app_id": "",
-  "type": "ionic-angular"
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
 }
