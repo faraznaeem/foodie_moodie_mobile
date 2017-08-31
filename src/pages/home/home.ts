@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+
+declare var google;
 
 @Component({
   selector: 'page-home',
@@ -7,8 +8,20 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
-
+  @ViewChild('map') mapElement: ElementRef;
+  map: any;
+  constructor() {
   }
 
+  ionViewDidLoad(){
+    this.initMap();
+  }
+
+  initMap() {
+    this.map = new google.maps.Map(this.mapElement.nativeElement, {
+      zoom: 13,
+      center: {lat: 59.329323, lng: 18.068581}
+    });
+
+  }
 }
