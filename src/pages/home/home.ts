@@ -9,7 +9,7 @@ declare var google;
 })
 export class HomePage {
   options : GeolocationOptions;
-  currentPos : Geoposition;
+  currentPos : {lat: number, lng: number};
   @ViewChild('map') mapElement: ElementRef;
   map: any;
   constructor(
@@ -20,11 +20,17 @@ export class HomePage {
   ionViewDidLoad(){
     this.initMap();
     this.geolocation.getCurrentPosition().then((resp) => {
-      console.log(resp)
-        }).catch((error) => {
+      console.log(resp);
+      this.currentPos = {
+        lat: resp.coords.latitude,
+        lng: resp.coords.longitude
+      };
+      this.addMarker();
+    }).catch((error) => {
       console.log('Error getting location', error);
     });
   }
+
   initMap() {
     this.map = new google.maps.Map(this.mapElement.nativeElement, {
       zoom: 13,
@@ -36,23 +42,24 @@ export class HomePage {
      // data can be a set of coordinates, or an error (if an error occurred).
      // data.coords.latitude
      // data.coords.longitude
-   });
+    });
   }
   addMarker(){
-
       let marker = new google.maps.Marker({
-      map: this.map,
-      animation: google.maps.Animation.DROP,
-      position: this.map.getCenter()
+        map: this.map,
+        animation: google.maps.Animation.DROP,
+        position: this.currentPos
       });
 
       let content = "<p>This is your current position !</p>";
       let infoWindow = new google.maps.InfoWindow({
-      content: content
+        content: content
       });
 
       google.maps.event.addListener(marker, 'click', () => {
-      infoWindow.open(this.map, marker);
+        infoWindow.open(this.map, marker);
       });
+
+      this.map.setCenter(marker.getPosition());
   }
 }
